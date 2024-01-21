@@ -19,3 +19,8 @@
 .list_anime {
     list-style-type: none;
 }
+
+.favorite-style {
+    border: 5px solid lightseagreen;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
