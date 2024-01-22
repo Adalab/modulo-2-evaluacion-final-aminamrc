@@ -1,17 +1,15 @@
 'use strict';
 
-const searchSection = document.querySelector('.js-search-section');
+//const searchSection = document.querySelector('.js-search-section');
 const inputAnime = document.querySelector('.js-inputAnime');
 const btn= document.querySelector('.js-btn');
 const reset= document.querySelector('.js-reset');
 const resultsContainer=document.querySelector('.js-results');
-let animeList=document.querySelector('.js-anime-list');
+let  animeList =document.querySelector('.js-anime-list');
 const favoritesContainer=document.querySelector('.js-favorites');
 const favoritesList=document.querySelector('.js-favorite-list');
 const inputAnimeValue=inputAnime.value;
-//const urlApi=`https://api.jikan.moe/v4/anime?q=naruto/${inputAnime.value}`;
 
-console.log(inputAnimeValue);
 
 let dataAnime= [];
 function getDataApi () {
@@ -19,44 +17,64 @@ function getDataApi () {
     .then (response => response.json())
     .then (data => {
       dataAnime=data.data;
-      console.log(dataAnime);
+      //console.log(dataAnime);
       renderAnime (dataAnime,resultsContainer);
-      //localStorage.setItem('anime', JSON.stringify(animeList)); chiamarlo nel fav e removefav
+      
     }); 
 }
 
 
-// let alltitleAnime=[];
-// let allimgAnime = [];
-
-function renderAnime (array,container) {
+function renderAnime (arrayAnime,container) {
     let animeList= "";
-    animeList += ` <h3> Lista Anime </h3>`;
-    for (const each of array) {
-    // alltitleAnime = each.title;
-    // allimgAnime =each.images;
-    // console.log(alltitleAnime);
-    // console.log(allimgAnime.jpg.image_url); 
-    animeList += `<li class="list_anime js-anime-selected" id="${each.mal_id}"> <p> ${each.title} </p>  
-     <img src=" ${each.images.jpg.image_url}" alt="img"> </img> </li> <button type="reset" class="btn-style js-btn-remove"> X </button>`
-     if (each.images.jpg.image_url === 'https://cdn.myanimelist.net/img/sp/icon/apple-touch-icon-256.png') {
-        each.images.jpg.image_url ='https://placehold.co/250x350';
-     } else (`${each.images.jpg.image_url}`); //let ImageUrl=
-    } if (favoriteList) {
-      console.log('fave');
-      `<img class="favorite-style"> </img>`
+    for (const eachAnime of arrayAnime) {
+    let title=eachAnime.title;
+    let imageUrl=eachAnime.images.jpg.image_url;
+    animeList += 
+    `<li class="list_anime js-anime-selected " id="${eachAnime.mal_id}"> `
+    
+    if (imageUrl === 'https://cdn.myanimelist.net/img/sp/icon/apple-touch-icon-256.png') {
+      imageUrl ='https://placehold.co/250x250';
+     } 
+     animeList += `<img src=" ${imageUrl}" alt="img"> </img> `
+     animeList += ` <p> ${title} </p>`
+     animeList+= `</li>`; 
     }
     container.innerHTML = animeList;
     listenerAnimeList ();
-    ListenerRemoveFavorites ();
+    //ListenerRemoveFavorites ();
     
+}
+
+
+
+function renderAnimeFavoritos (arrayAnime,container) {
+  let favoriteList= "";
+  for (const eachAnime of arrayAnime) {
+  let title=eachAnime.title;
+  let imageUrl=eachAnime.images.jpg.image_url;
+  favoriteList += 
+  `<li class="list_anime js-anime-selected favorite-style" id="${eachAnime.mal_id}"> `
+  
+  if (imageUrl === 'https://cdn.myanimelist.net/img/sp/icon/apple-touch-icon-256.png') {
+    imageUrl ='https://placehold.co/250x250';
+   } 
+   favoriteList += `<img src=" ${imageUrl}" alt="img"> </img> `;
+   favoriteList += ` <p> ${title} </p>`;
+   favoriteList += `<button type="reset" class="btn-style js-btn-remove"> X </button>`;
+   favoriteList += `</li>`;
+    
+  container.innerHTML = favoriteList;
+ 
+ 
+}
+ ListenerRemoveFavorites ();
 }
 
 function ListenerRemoveFavorites () {
 
 const btnRemoveFavorites=document.querySelectorAll('.js-btn-remove');
 for ( const all of btnRemoveFavorites) {
-btnRemoveFavorites.addEventListener('click', removeFavorites);
+all.addEventListener('click', removeFavorites);
 console.log('clicked remove')
 }
 
@@ -77,17 +95,15 @@ function removeFavorites (event) {
     
 
   const thisAnime = favoriteList.findIndex(
-   (item) => (item.mal_id) === (idAnime)  );
+   (item) => (item.mal_id) === (idAnimeInt)  );
    console.log(thisAnime); 
 
-  if (thisAnime !== -1) {
+  if (thisAnime === -1) {
    favoriteList.splice(AnimeSelected,1);  
-   } else {
-   console.log('already added');
-  }
-   //console.log(favoriteList);
-  //renderAnime (favoriteList,favoritesContainer);
-  
+   } 
+
+  renderAnimeFavoritos (favoriteList,favoritesContainer);
+  localStorage.setItem('anime', JSON.stringify(favoriteList)); 
 
 }
 
@@ -122,8 +138,10 @@ function addFavorite (event) {
       if (thisAnime === -1) {
         favoriteList.push(AnimeSelected);  
       } 
-     localStorage.setItem('anime', JSON.stringify(animeList));
-     renderAnime (favoriteList,favoritesContainer);
+     
+    localStorage.setItem('anime', JSON.stringify(favoriteList)); 
+     renderAnimeFavoritos (favoriteList,favoritesContainer);
+     renderAnime (dataAnime,resultsContainer);
     
 
 }
@@ -139,22 +157,26 @@ function listenerAnimeList () {
      
 
      function getDataLocalStorage() {
-        const dataAnimeLocal = JSON.parse(localStorage.getItem('anime'));
+        const dataAnimeLocal = JSON.parse(localStorage.getItem(favoriteList));
         if (dataAnimeLocal !== null) {
-          animeList = dataAnimeLocal;
-          getDataLocalStorage();
-          renderAnime(dataAnimeLocal, resultsContainer);
-          
-        } else {
+          favoriteList = dataAnimeLocal;
+          renderAnimeFavoritos(dataAnimeLocal, favoritesContainer);}
+        else    {
           getDataApi();
         }
-        console.log(animeList);
+        
+        
       }
       
-      
-     
-     // animeList[one].addEventListener('click', addFavorite);
-     // console.log('cliked');
-    
+      getDataLocalStorage();
+  
+      reset.addEventListener('click',resetAnimeList);
 
-    
+      function resetAnimeList () {
+        animeList= [];
+        favoriteList= [];
+        resultsContainer.innerHTML="";
+        favoritesContainer.innerHTML="";
+        inputAnime.value="";
+        localStorage.setItem('anime', JSON.stringify()); 
+      }

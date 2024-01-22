@@ -1,14 +1,15 @@
 .body {
     background-color: black;
     color: white;
+   
     
     
 }
 
 .display {
-  display: flex;
-  justify-content: center;
-    width: 100%;
+  
+display: flex;
+
 }
 
 .display_results {
@@ -29,6 +30,7 @@
 
 .list_anime {
     list-style-type: none;
+    flex-direction: row;
 }
 
 .favorite-style {
