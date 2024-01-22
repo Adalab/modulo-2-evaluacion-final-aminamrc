@@ -21,7 +21,7 @@ function getDataApi () {
       dataAnime=data.data;
       console.log(dataAnime);
       renderAnime (dataAnime,resultsContainer);
-      localStorage.setItem('anime', JSON.stringify(animeList));
+      //localStorage.setItem('anime', JSON.stringify(animeList)); chiamarlo nel fav e removefav
     }); 
 }
 
@@ -31,17 +31,18 @@ function getDataApi () {
 
 function renderAnime (array,container) {
     let animeList= "";
+    animeList += ` <h3> Lista Anime </h3>`;
     for (const each of array) {
     // alltitleAnime = each.title;
     // allimgAnime =each.images;
     // console.log(alltitleAnime);
     // console.log(allimgAnime.jpg.image_url); 
     animeList += `<li class="list_anime js-anime-selected" id="${each.mal_id}"> <p> ${each.title} </p>  
-     <img src=" ${each.images.jpg.image_url}" alt="img"> </img> </li> <button type="reset" class="js-btn-remove"> Remove </button>`
+     <img src=" ${each.images.jpg.image_url}" alt="img"> </img> </li> <button type="reset" class="btn-style js-btn-remove"> X </button>`
      if (each.images.jpg.image_url === 'https://cdn.myanimelist.net/img/sp/icon/apple-touch-icon-256.png') {
-        each.images.jpg.image_url ='https://via.placeholder.com/210x295/ffffff/666666/?text=TV';
-     } else (`${each.images.jpg.image_url}`);
-    } if (animeList ===favoriteList) {
+        each.images.jpg.image_url ='https://placehold.co/250x350';
+     } else (`${each.images.jpg.image_url}`); //let ImageUrl=
+    } if (favoriteList) {
       console.log('fave');
       `<img class="favorite-style"> </img>`
     }
@@ -56,35 +57,36 @@ function ListenerRemoveFavorites () {
 const btnRemoveFavorites=document.querySelectorAll('.js-btn-remove');
 for ( const all of btnRemoveFavorites) {
 btnRemoveFavorites.addEventListener('click', removeFavorites);
+console.log('clicked remove')
 }
 
 }
 
 
-function removeFavorites () {
+function removeFavorites (event) {
 
   console.log('clicked');
-  // const idAnime = (event.currentTarget.id);
-  // const idAnimeInt =  parseInt (idAnime);
-  // console.log(idAnime);
+  const idAnime = (event.currentTarget.id);
+  const idAnimeInt =  parseInt (idAnime);
+  console.log(idAnime);
   
 
-  // const AnimeSelected = dataAnime.find(
-  //     (item) => (idAnimeInt) === (item.mal_id));
-  //     console.log(AnimeSelected);
+  const AnimeSelected = dataAnime.find(
+  (item) => (idAnimeInt) === (item.mal_id));
+  console.log(AnimeSelected);
     
 
-  // const thisAnime = favoriteList.findIndex(
-  //     (item) => (item.mal_id) === (idAnime)  );
-  //      console.log(thisAnime); 
+  const thisAnime = favoriteList.findIndex(
+   (item) => (item.mal_id) === (idAnime)  );
+   console.log(thisAnime); 
 
-  //   if (thisAnime === -1) {
-  //     favoriteList.push(AnimeSelected);  
-  //   } else {
-  //     console.log('already added');
-  //   }
-  //   console.log(favoriteList);
-  //  renderAnime (favoriteList,favoritesContainer);
+  if (thisAnime !== -1) {
+   favoriteList.splice(AnimeSelected,1);  
+   } else {
+   console.log('already added');
+  }
+   //console.log(favoriteList);
+  //renderAnime (favoriteList,favoritesContainer);
   
 
 }
@@ -114,15 +116,13 @@ function addFavorite (event) {
       
 
     const thisAnime = favoriteList.findIndex(
-        (item) => (item.mal_id) === (idAnime)  );
+        (item) => (item.mal_id) === (idAnimeInt)  );
          console.log(thisAnime); 
 
       if (thisAnime === -1) {
         favoriteList.push(AnimeSelected);  
-      } else {
-        console.log('already added');
-      }
-      console.log(favoriteList);
+      } 
+     localStorage.setItem('anime', JSON.stringify(animeList));
      renderAnime (favoriteList,favoritesContainer);
     
 

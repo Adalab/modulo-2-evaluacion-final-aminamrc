@@ -1,0 +1,68 @@
+.body {
+    background-color: black;
+    color: white;
+    
+    
+}
+
+.display {
+  display: flex;
+  justify-content: center;
+    width: 100%;
+}
+
+.display_results {
+    display: flex;
+    flex-direction: column;
+    margin: 50px;
+    border: 3px solid palevioletred;
+    width: 100%;
+   }
+
+.display_favorites {
+    display: flex;
+    flex-direction: column;
+    margin: 50px;
+    border: 3px solid aqua;
+    width: 100%;
+    }
+
+.list_anime {
+    list-style-type: none;
+}
+
+.favorite-style {
+    border: 5px solid lightseagreen;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.btn-style {
+    width: 25px;
+    height: 25px;
+    background-color: palevioletred;
+    color: white;
+}
+
+.title-style {
+    color: aqua;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.btn-busqueda {
+    background-color: aqua;
+    color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.btn-reset {
+    background-color: aqua;
+    color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.input-style {
+    background-color: black;
+    color: white ;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    border: 2px solid aqua;
+}
